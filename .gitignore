@@ -6,6 +6,7 @@
 # Without
 !.gitignore
 !wsb programowanie.cpp
+!README.md
 
 
 
