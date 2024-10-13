@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+
+
+# Without
+!.gitignore
+!wsb programowanie.cpp
+
+
+
+
+!*/
