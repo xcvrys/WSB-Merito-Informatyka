@@ -1,166 +1,140 @@
-#include <iostream>
+
 #include <algorithm>
+#include <cmath>
+#include <iostream>
+#include <numeric>
 #include <vector>
 
-using namespace std;
-
-// Zadanie 1: Funkcja „Hello, World!”
+// Zadanie 1: Funkcja wyświetlająca "Hello, World!"
 void helloWorld(int times = 1) {
-    for (int i = 0; i < times; ++i) {
-        cout << "Hello, World!" << endl;
-    }
+  for (int i = 0; i < times; ++i) {
+    std::cout << "Hello, World!" << std::endl;
+  }
 }
 
 // Zadanie 2: Funkcja sortująca tablicę
-void sortArray(int arr[], int size) {
-    sort(arr, arr + size);
-    cout << "Posortowana tablica: ";
-    for (int i = 0; i < size; ++i) {
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-}
+void sortArray(int arr[], int size) { std::sort(arr, arr + size); }
 
 // Zadanie 3: Funkcje liczące silnię
+// a) Używając pętli
 int factorialLoop(int n) {
-    int result = 1;
-    for (int i = 1; i <= n; ++i) {
-        result *= i;
-    }
-    return result;
+  int result = 1;
+  for (int i = 1; i <= n; ++i) {
+    result *= i;
+  }
+  return result;
 }
 
-int factorialRecursive(int n) {
-    return (n <= 1) ? 1 : n * factorialRecursive(n - 1);
+// b) Używając rekurencji
+int factorialRecursion(int n) {
+  if (n <= 1) {
+    return 1;
+  }
+  return n * factorialRecursion(n - 1);
 }
 
 // Zadanie 4: Funkcja inline
-inline int square(int x) {
-    return x * x;
-}
+inline int multiply(int a, int b) { return a * b; }
+// Funkcja inline różni się od innych funkcji tym, że kompilator może wstawić
+// jej kod bezpośrednio w miejsce wywołania, co może przyspieszyć działanie
+// programu.
 
 // Zadanie 5: Funkcja odwracająca kolejność elementów tablicy
-void reverseArray(int arr[], int size) {
-    for (int i = 0; i < size / 2; ++i) {
-        swap(arr[i], arr[size - i - 1]);
-    }
-    cout << "Odwrócona tablica: ";
-    for (int i = 0; i < size; ++i) {
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-}
+void reverseArray(int arr[], int size) { std::reverse(arr, arr + size); }
 
-// Zadanie 6: Funkcja statystyk
-void stats(const int arr[], int size) {
-    int sum = 0, min = arr[0], max = arr[0];
-    vector<int> vec(arr, arr + size);
+// Zadanie 6: Funkcja obliczająca sumę, średnią, minimum, maksimum oraz medianę
+// tablicy
+void arrayStatistics(int arr[], int size) {
+  int sum = std::accumulate(arr, arr + size, 0);
+  double average = static_cast<double>(sum) / size;
+  int min = *std::min_element(arr, arr + size);
+  int max = *std::max_element(arr, arr + size);
 
-    for (int i = 0; i < size; ++i) {
-        sum += arr[i];
-        if (arr[i] < min) min = arr[i];
-        if (arr[i] > max) max = arr[i];
-    }
+  std::vector<int> sortedArr(arr, arr + size);
+  std::sort(sortedArr.begin(), sortedArr.end());
+  double median = (size % 2 == 0)
+                      ? (sortedArr[size / 2 - 1] + sortedArr[size / 2]) / 2.0
+                      : sortedArr[size / 2];
 
-    double avg = static_cast<double>(sum) / size;
-    sort(vec.begin(), vec.end());
-    double median = (size % 2 == 0) ? (vec[size / 2 - 1] + vec[size / 2]) / 2.0 : vec[size / 2];
-
-    cout << "Suma: " << sum << ", Średnia: " << avg << ", Min: " << min
-              << ", Max: " << max << ", Mediana: " << median << endl;
+  std::cout << "Sum: " << sum << std::endl;
+  std::cout << "Average: " << average << std::endl;
+  std::cout << "Min: " << min << std::endl;
+  std::cout << "Max: " << max << std::endl;
+  std::cout << "Median: " << median << std::endl;
 }
 
 // Zadanie 7: Przeciążanie funkcji
-int multiply(int a, int b) {
-    return a * b;
-}
+void print(int x) { std::cout << "Integer: " << x << std::endl; }
 
-double multiply(double a, double b) {
-    return a * b;
-}
+void print(double x) { std::cout << "Double: " << x << std::endl; }
 
-// Zadanie 8: Ciąg Fibonacciego
+// Zadanie 8: Funkcje obliczające wartość n-tego elementu ciągu Fibonacciego
+// a) Używając pętli
 int fibonacciLoop(int n) {
-    int a = 0, b = 1, temp;
-    for (int i = 2; i <= n; ++i) {
-        temp = a + b;
-        a = b;
-        b = temp;
-    }
-    return (n == 0) ? 0 : b;
+  if (n <= 1)
+    return n;
+  int a = 0, b = 1, c;
+  for (int i = 2; i <= n; ++i) {
+    c = a + b;
+    a = b;
+    b = c;
+  }
+  return c;
 }
 
-int fibonacciRecursive(int n) {
-    return (n <= 1) ? n : fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
-}
-
-void showMenu() {
-    cout << "\nWybierz numer zadania:\n";
-    cout << "1. Hello World\n";
-    cout << "2. Sortowanie tablicy\n";
-    cout << "3. Silnia (pętla i rekurencja)\n";
-    cout << "4. Funkcja inline (kwadrat liczby)\n";
-    cout << "5. Odwrócenie tablicy\n";
-    cout << "6. Statystyki tablicy\n";
-    cout << "7. Przeciążanie funkcji (mnożenie int i double)\n";
-    cout << "8. Ciąg Fibonacciego (pętla i rekurencja)\n";
-    cout << "0. Wyjście\n";
-    cout << "Twój wybór: ";
+// b) Używając rekurencji
+int fibonacciRecursion(int n) {
+  if (n <= 1)
+    return n;
+  return fibonacciRecursion(n - 1) + fibonacciRecursion(n - 2);
 }
 
 int main() {
-    int choice;
-    while (true) {
-        showMenu();
-        cin >> choice;
+  // Testowanie funkcji z zadania 1
+  helloWorld();
+  helloWorld(3);
 
-        switch (choice) {
-            case 1:
-                helloWorld();
-                helloWorld(3);
-                break;
-            case 2: {
-                int arr[] = {5, 3, 8, 1, 2};
-                int size = sizeof(arr) / sizeof(arr[0]);
-                sortArray(arr, size);
-                break;
-            }
-            case 3: {
-                int number = 5;
-                cout << "Silnia (pętla): " << factorialLoop(number) << endl;
-                cout << "Silnia (rekurencja): " << factorialRecursive(number) << endl;
-                break;
-            }
-            case 4:
-                cout << "Kwadrat liczby 4 to: " << square(4) << endl;
-                break;
-            case 5: {
-                int arr[] = {1, 2, 3, 4, 5};
-                int size = sizeof(arr) / sizeof(arr[0]);
-                reverseArray(arr, size);
-                break;
-            }
-            case 6: {
-                int arr[] = {5, 3, 8, 1, 2};
-                int size = sizeof(arr) / sizeof(arr[0]);
-                stats(arr, size);
-                break;
-            }
-            case 7: // 🔥
-                cout << "Int: " << multiply(3, 4) << endl;
-                cout << "Double: " << multiply(3.5, 4.2) << endl;
-                break;
-            case 8: {
-                int n = 5;
-                cout << "Fibonacci (pętla): " << fibonacciLoop(n) << endl;
-                cout << "Fibonacci (rekurencja): " << fibonacciRecursive(n) << endl;
-                break;
-            }
-            case 0:
-                cout << "Zakończono program." << endl;
-                return 0;
-            default:
-                cout << "Niepoprawny wybór. Spróbuj ponownie." << endl;
-        }
-    }
+  // Testowanie funkcji z zadania 2
+  int arr1[] = {5, 3, 8, 1, 2};
+  int size1 = sizeof(arr1) / sizeof(arr1[0]);
+  sortArray(arr1, size1);
+  std::cout << "Sorted array: ";
+  for (int i = 0; i < size1; ++i) {
+    std::cout << arr1[i] << " ";
+  }
+  std::cout << std::endl;
+
+  // Testowanie funkcji z zadania 3
+  std::cout << "Factorial (loop) of 5: " << factorialLoop(5) << std::endl;
+  std::cout << "Factorial (recursion) of 5: " << factorialRecursion(5)
+            << std::endl;
+
+  // Testowanie funkcji z zadania 4
+  std::cout << "Multiply 3 and 4: " << multiply(3, 4) << std::endl;
+
+  // Testowanie funkcji z zadania 5
+  int arr2[] = {1, 2, 3, 4, 5};
+  int size2 = sizeof(arr2) / sizeof(arr2[0]);
+  reverseArray(arr2, size2);
+  std::cout << "Reversed array: ";
+  for (int i = 0; i < size2; ++i) {
+    std::cout << arr2[i] << " ";
+  }
+  std::cout << std::endl;
+
+  // Testowanie funkcji z zadania 6
+  int arr3[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+  int size3 = sizeof(arr3) / sizeof(arr3[0]);
+  arrayStatistics(arr3, size3);
+
+  // Testowanie funkcji z zadania 7
+  print(42);
+  print(3.14);
+
+  // Testowanie funkcji z zadania 8
+  std::cout << "Fibonacci (loop) of 10: " << fibonacciLoop(10) << std::endl;
+  std::cout << "Fibonacci (recursion) of 10: " << fibonacciRecursion(10)
+            << std::endl;
+
+  return 0;
 }
