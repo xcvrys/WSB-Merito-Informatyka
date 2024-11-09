@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <list>
 #include <stdexcept>
 
 // Zadanie 3
@@ -61,22 +62,25 @@ public:
 };
 
 // Zadanie 6
+// Klasa bazowa
 class Figura {
 public:
-  virtual double obliczPole() const = 0;
-  virtual double obliczObwod() const = 0;
-  virtual ~Figura() {}
+  virtual double obliczPole() const = 0;  // Metoda abstrakcyjna
+  virtual double obliczObwod() const = 0; // Metoda abstrakcyjna
+  virtual ~Figura() {}                    // Wirtualny destruktor
 };
 
+// Klasa pochodna - Trojkat
 class Trojkat : public Figura {
 private:
-  double a, b, c;
+  double a, b, c; // Pola
 
 public:
   Trojkat(double sideA, double sideB, double sideC)
-      : a(sideA), b(sideB), c(sideC) {}
+      : a(sideA), b(sideB), c(sideC) {} // Konstruktor
 
   double obliczPole() const override {
+    // Wzór Herona
     double p = (a + b + c) / 2;
     return sqrt(p * (p - a) * (p - b) * (p - c));
   }
@@ -84,26 +88,26 @@ public:
   double obliczObwod() const override { return a + b + c; }
 };
 
+// Klasa pochodna - Kolo
 class Kolo : public Figura {
 private:
-  double promien;
+  double promien; // Pole
 
 public:
-  Kolo(double r) : promien(r) {}
+  Kolo(double r) : promien(r) {} // Konstruktor
 
-  double obliczPole() const override {
-    return std::numbers::pi * promien * promien;
-  }
+  double obliczPole() const override { return 3.14 * promien * promien; }
 
-  double obliczObwod() const override { return 2 * std::numbers::pi * promien; }
+  double obliczObwod() const override { return 2 * 3.14 * promien; }
 };
 
+// Klasa pochodna - Prostokat
 class Prostokat : public Figura {
 private:
-  double dlugosc, szerokosc;
+  double dlugosc, szerokosc; // Pola
 
 public:
-  Prostokat(double l, double s) : dlugosc(l), szerokosc(s) {}
+  Prostokat(double l, double s) : dlugosc(l), szerokosc(s) {} // Konstruktor
 
   double obliczPole() const override { return dlugosc * szerokosc; }
 
@@ -129,19 +133,25 @@ int main() {
   mojPies.szczekaj();
 
   // Zadanie 6
-  std::list<Figura *> listaFigur;
+
+  std::list<Figura *> listaFigur; // Lista wskaźników do obiektów klasy Figura
+
   listaFigur.push_back(new Kolo(3.0));
   listaFigur.push_back(new Trojkat(4.0, 5.0, 6.0));
   listaFigur.push_back(new Prostokat(2.0, 4.0));
+  // Tu można dodać więcej figur do listy
 
   for (const auto &figura : listaFigur) {
     std::cout << "Pole: " << figura->obliczPole()
               << ", Obwod: " << figura->obliczObwod() << std::endl;
   }
 
+  // Zwolnienie pamięci zaalokowanej na obiekty
   for (const auto &figura : listaFigur) {
     delete figura;
   }
+
+  return 0;
 
   return 0;
 }
